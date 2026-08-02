@@ -1,0 +1,53 @@
+{
+    "modes": [
+	{
+	    "modename": "Ultra Power Save",
+	    
+	    "cpu_settings": {
+		"turbo_boost": false,
+		"energy_performance_preference": "power",
+		"scaling_governor": "powersave",
+		"min_freq": 0,
+		"max_freq": 3000000,
+		"dynamic_epp": false
+	    },
+	    "gpu_settings": {
+		"card": 1,
+		"gpu_freq_min": 0,
+		"gpu_freq_max": 1400,
+		"vram_freq_min": 0,
+		"vram_freq_max": 0,
+		"is_set": true
+	    },
+	    "platform_settings": {
+		"profile": "low-power"
+	    },
+	    "hook": "hyprctl eval \"hl.monitor({ output = 'eDP-1', mode = '2560x1600@60' })\"; echo \"1\" | sudo tee /sys/class/backlight/amdgpu_bl1/brightness"
+	},
+
+	{
+	    "modename": "Power Save",
+	    
+	    "cpu_settings": {
+		"turbo_boost": false,
+		"energy_performance_preference": "power",
+		"scaling_governor": "powersave",
+		"min_freq": 0,
+		"max_freq": 3200000,
+		"dynamic_epp": false
+	    },
+	    "gpu_settings": {
+		"card": 1,
+		"gpu_freq_min": 0,
+		"gpu_freq_max": 1700,
+		"vram_freq_min": 0,
+		"vram_freq_max": 0,
+		"is_set": true
+	    },
+	    "platform_settings": {
+		"profile": "low-power"
+	    },
+	    "hook": "hyprctl eval \"hl.monitor({ output = 'eDP-1', mode = '2560x1600@120' })\""
+	}
+    ]
+}

@@ -31,7 +31,7 @@
 - [x] Добавлена поддержка переключения профилей ACPI (`platform_profile`).
 
 #### 🟨 Шаг 2: Модульность и расширение парсеров — **В ПРОЦЕССЕ**
-- [ ] Разнесение монолитного `main.rs` на изолированные модули (`config`, `hardware::cpu`, `hardware::gpu`, `hardware::platform`).
+- [x] Разнесение монолитного `main.rs` на изолированные модули (`config`, `hardware::cpu`, `hardware::gpu`, `hardware::platform`).
 - [ ] Интеграция парсера файла `pp_od_clk_voltage` для автоматического определения поддержки овердрайва и чтения `OD_RANGE` (защита от дурака).
 - [ ] Перевод VRAM на чтение и маскирование аппаратных стейджей в `pp_dpm_mclk`.
 
@@ -58,5 +58,6 @@ cargo build --release
 
 ### Запуск текущей версии ядра (требуется sudo и параметры ядра `amd_pstate=active` и `amdgpu.ppfeaturemask=0xffffffff`):
 ```bash
+cp example_config.json target/release/config.json
 sudo ./target/release/amppo
 ```
