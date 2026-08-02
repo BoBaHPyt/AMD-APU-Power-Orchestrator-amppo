@@ -1,6 +1,6 @@
 use std::{fs::OpenOptions, io::Result};
 
-use crate::hardware::{cpu::CpuSettings, gpu::GpuSettings, platform::PlatformSettings};
+use crate::{hardware::{cpu::CpuSettings, gpu::GpuSettings, platform::PlatformSettings}, state::State};
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug)]
@@ -25,7 +25,23 @@ impl Config {
 	Ok(serde_json::from_reader(file)?)
     }
 
-    pub fn next(&self) -> &PerformanceMode {
-	&self.modes[0]
+    pub fn current<'a>(&'a self, state: &mut State) -> &'a PerformanceMode {
+	if self.modes.len() <= state.index_mod {
+	    state.index_mod = 0;
+	}
+
+	self.modes.get(state.index_mod).unwrap()
+    }
+
+    pub fn next<'a>(&'a self, state: &mut State) -> &'a PerformanceMode {
+	state.index_mod += 1;
+	if self.modes.len() <= state.index_mod {
+	    state.index_mod = 0;
+	}
+
+	let mode = self.modes.get(state.index_mod).unwrap();
+	state.current_mode = mode.modename.clone();
+
+	mode
     }
 }

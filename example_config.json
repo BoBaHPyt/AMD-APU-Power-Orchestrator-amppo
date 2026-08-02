@@ -22,7 +22,7 @@
 	    "platform_settings": {
 		"profile": "low-power"
 	    },
-	    "hook": "hyprctl eval \"hl.monitor({ output = 'eDP-1', mode = '2560x1600@60' })\"; echo \"1\" | sudo tee /sys/class/backlight/amdgpu_bl1/brightness"
+	    "hook": "hyprctl eval \"hl.monitor({ output = 'eDP-1', mode = '2560x1600@60' })\"; echo 1 | tee /sys/class/backlight/amdgpu_bl1/brightness"
 	},
 
 	{
@@ -47,7 +47,7 @@
 	    "platform_settings": {
 		"profile": "low-power"
 	    },
-	    "hook": "hyprctl eval \"hl.monitor({ output = 'eDP-1', mode = '2560x1600@120' })\""
+	    "hook": "hyprctl eval \"hl.monitor({ output = 'eDP-1', mode = '2560x1600@120' })\"; echo 32000 | tee /sys/class/backlight/amdgpu_bl1/brightness"
 	}
     ]
 }

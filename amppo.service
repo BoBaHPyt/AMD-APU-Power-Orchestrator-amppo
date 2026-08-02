@@ -1,0 +1,14 @@
+[Unit]
+Description=AMD APU Power Orchestrator Daemon
+After=generic-board-startup.service local-fs.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/amppo-daemon
+Restart=always
+RestartSec=3
+
+Environment=LANG=C.UTF-8
+
+[Install]
+WantedBy=multi-user.target
