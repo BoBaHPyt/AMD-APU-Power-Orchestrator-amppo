@@ -75,6 +75,7 @@ fn main() -> std::io::Result<()> {
                         let response_bytes = serde_json::to_vec(&response)?.to_owned();
                         let _ = stream.write_all(&response_bytes);
                     }
+		    state.save()?;
                 }
             }
             Err(e) => eprintln!("Ошибка сокета: {}", e),

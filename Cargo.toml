@@ -2,6 +2,7 @@
 name = "amppo"
 version = "0.1.0"
 edition = "2024"
+author = "13o13aH"
 
 [[bin]]
 name = "amppo-daemon"
@@ -12,6 +13,12 @@ path = "src/bin/daemon.rs"
 name = "amppo-cli"
 path = "src/bin/client.rs"
 
+[profile.release]
+opt-level = "z"     # Оптимизация по размеру бинаря
+lto = true          # Link-Time Optimization (удаляет неиспользуемый код)
+codegen-units = 1   # Улучшает оптимизацию
+
 [dependencies]
+clap = { version = "4.5", features = ["derive"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

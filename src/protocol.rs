@@ -11,3 +11,9 @@ pub struct DaemonResp {
     pub modename: String,
     pub hook: Option<String>
 }
+
+#[derive(Serialize, Debug)]
+pub struct CliResp {
+    pub text: String,
+    pub alt: String
+}
