@@ -2,10 +2,10 @@ use std::{
     fs::OpenOptions,
     io::{Result, Write},
 };
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug, Clone, Default)]
 pub struct GpuSettings {
     pub card: u32,
 

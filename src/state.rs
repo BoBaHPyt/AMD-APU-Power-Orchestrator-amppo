@@ -9,6 +9,12 @@ pub struct State {
     pub current_mode: String
 }
 
+impl Default for State {
+    fn default() -> Self {
+	Self::new()
+    }
+}
+
 impl State {
     pub fn new() -> Self {
 	Self { index_mod: 0, current_mode: String::new() }
@@ -21,8 +27,8 @@ impl State {
     }
 
     pub fn save(&self) -> Result<()> {
-	let file = OpenOptions::new().write(true).create(true).open("/var/lib/amppo/state.json")?;
-
+	let file = OpenOptions::new().write(true).create(true).truncate(true).open("/var/lib/amppo/state.json")?;
+	
 	serde_json::to_writer(file, self)?;
 	Ok(())
     }

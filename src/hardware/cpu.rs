@@ -1,14 +1,14 @@
 use std::{
     fmt,
     fs::OpenOptions,
-    io::{Read, Write},
+    io::{Read, Write, ErrorKind},
     ops::RangeInclusive,
     result::Result,
 };
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug, Clone, Default)]
 pub struct CpuSettings {
     pub turbo_boost: bool,
 
@@ -64,9 +64,17 @@ impl From<std::io::Error> for UpdateCpuSettingsError {
 }
 
 fn push_cpu(path: &str, data: &str) -> Result<(), UpdateCpuSettingsError> {
-    let mut file = OpenOptions::new().write(true).open(path)?;
-    file.write_all(format!("{}\n", data).as_bytes())?;
-    Ok(())
+    match OpenOptions::new().write(true).open(path) {
+        Ok(mut file) => {
+            file.write_all(format!("{}\n", data).as_bytes())?;
+            Ok(())
+        }
+        Err(e) if e.kind() == ErrorKind::NotFound => {
+            eprintln!("Warning: file not found, skipping: {}", path);
+            Ok(())
+        }
+        Err(e) => Err(e.into()),
+    }
 }
 
 fn check_cpu(path: &str, data: &str) -> Result<(), UpdateCpuSettingsError> {
@@ -125,6 +133,7 @@ pub fn update_cpu_settings(settings: &CpuSettings) -> Result<(), UpdateCpuSettin
     push_cpu(dynamic_epp_path, dynamic_epp)?;
     push_cpu(turbo_boost_path, &(settings.turbo_boost as u8).to_string())?;
 
+
     for core_id in get_cpu_range()? {
         let epap_path = format!(
             "/sys/devices/system/cpu/cpufreq/policy{}/energy_performance_available_preferences",
@@ -151,12 +160,12 @@ pub fn update_cpu_settings(settings: &CpuSettings) -> Result<(), UpdateCpuSettin
             core_id
         );
 
+	check_cpu(&sag_path, &settings.scaling_governor)?;
+	push_cpu(&sg_path, &settings.scaling_governor)?;
+
         check_cpu(&epap_path, &settings.energy_performance_preference)?;
-        push_cpu(&epp_path, &settings.energy_performance_preference)?;
-        
-        check_cpu(&sag_path, &settings.scaling_governor)?;
-        push_cpu(&sg_path, &settings.scaling_governor)?;
-        
+	push_cpu(&epp_path, &settings.energy_performance_preference)?;
+
         if settings.min_freq > 0 {
             push_cpu(&min_freq_path, &settings.min_freq.to_string())?;
         }

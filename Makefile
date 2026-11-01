@@ -21,6 +21,7 @@ install: build
 	sudo mkdir -p $(DATADIR)
 
 	sudo install -m 755 target/release/$(BINARY)-daemon $(BINDIR)/$(BINARY)-daemon
+	sudo install -m 755 target/release/$(BINARY)-cli $(BINDIR)/$(BINARY)-cli
 
 	sudo test -f $(CONFDIR)/$(BINARY)/config.json || sudo install -m 644 example_config.json $(CONFDIR)/$(BINARY)/config.json
 
